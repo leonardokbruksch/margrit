@@ -11,6 +11,12 @@
 <div layout:fragment="content">
     <h1>Hello world</h1>
     <h2>By Leo...</h2>
+
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+        <input type="file" name="file" /><br/><br/>
+        <input type="submit" value="Submit" />
+    </form>
+
 </div>
 </body>
 <th:block layout:fragment="scripts">
