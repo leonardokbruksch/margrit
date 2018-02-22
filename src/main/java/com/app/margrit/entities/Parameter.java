@@ -1,20 +1,47 @@
 package com.app.margrit.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Parameter {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String parameterType;
 
     private String parameterName;
 
-    public Parameter(String parameterType, String parameterName){
+    public Parameter(String parameterName, String parameterType){
         this.parameterType = parameterType;
+        this.parameterName = parameterName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getParameterType() {
+        return parameterType;
+    }
+
+    public void setParameterType(String parameterType) {
+        this.parameterType = parameterType;
+    }
+
+    public String getParameterName() {
+        return parameterName;
+    }
+
+    public void setParameterName(String parameterName) {
         this.parameterName = parameterName;
     }
 
