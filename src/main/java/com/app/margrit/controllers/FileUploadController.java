@@ -1,5 +1,7 @@
 package com.app.margrit.controllers;
 
+import com.app.margrit.parser.DefaultOperationsCsvParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +17,9 @@ import java.nio.file.Paths;
 @Controller
 public class FileUploadController {
 
+    @Autowired
+    private DefaultOperationsCsvParser csvParser;
+
     private static String UPLOADED_FOLDER = "C://margrit//uploadedFiles//";
 
     @PostMapping("/upload")
@@ -26,6 +31,18 @@ public class FileUploadController {
             return "redirect:uploadStatus";
         }
 
+        //saveFileOnFolder(file, redirectAttributes);
+
+        try {
+            csvParser.readCsvOperationsFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/uploadStatus";
+    }
+
+    private void saveFileOnFolder(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         try {
 
             // Get the file and save it somewhere
@@ -39,8 +56,6 @@ public class FileUploadController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return "redirect:/uploadStatus";
     }
 
 }

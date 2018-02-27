@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ClassRepository extends JpaRepository<Class, String> {
 
+    Class findByClassName(String className);
 }

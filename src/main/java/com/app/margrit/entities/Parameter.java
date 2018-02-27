@@ -21,6 +21,8 @@ public class Parameter {
         this.parameterName = parameterName;
     }
 
+    protected Parameter(){}
+
     public Long getId() {
         return id;
     }

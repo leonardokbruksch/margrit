@@ -22,6 +22,8 @@ public class Method {
         this.methodName = methodName;
     }
 
+    protected Method(){}
+
     public Long getId() {
         return id;
     }
