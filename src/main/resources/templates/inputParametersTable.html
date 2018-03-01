@@ -10,33 +10,20 @@
     <link rel="stylesheet" href="/css/home.css"/>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 <body class="text-center container">
 
+        hey baby
 
-        <form method="POST" enctype="multipart/form-data" class="form-signin" id="fileUploadForm">
-
-            <img class="mb-4" src="img/logo.png" alt="" height="100" width="100"/>
-
-            <h1 class="h3 mb-3 font-weight-normal">Please upload a .csv File</h1>
-
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="customFile" name="file"/>
-                <label class="custom-file-label" for="customFile">Choose file</label>
-            </div>
-
-            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="submitUpload" />
-
-            <span id="result"></span>
-
-        </form>
-
-        <div id="classesContainer">
-
-        </div>
+        <table>
+        <tr th:each="class : ${classes}">
+            entrou no loop
+            <td th:text="${class.className}">className</td>
+        </tr>
+        </table>
 
     <script src="/js/home.js"></script>
 </body>

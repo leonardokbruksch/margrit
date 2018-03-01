@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -33,7 +32,7 @@ public class DefaultOperationsCsvParser implements OperationsCsvParser {
 
     String[] HEADER = { "Operation", "Class", "Definition"};
 
-    public void readCsvOperationsFile(MultipartFile file) throws IOException {
+    public List<Class> readCsvOperationsFile(MultipartFile file) throws IOException {
         removeOldEntries();
 
         Reader inputStreamReader = new InputStreamReader(file.getInputStream());
@@ -43,6 +42,8 @@ public class DefaultOperationsCsvParser implements OperationsCsvParser {
         for (CSVRecord record : records) {
             createEntities(record);
         }
+
+       return classRepository.findAll();
 
     }
 
