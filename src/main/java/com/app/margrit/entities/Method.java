@@ -18,11 +18,21 @@ public class Method {
 
     private String returnType;
 
+    private String expectedReturnValue;
+
     public Method(String methodName){
         this.methodName = methodName;
     }
 
     protected Method(){}
+
+    public String getExpectedReturnValue() {
+        return expectedReturnValue;
+    }
+
+    public void setExpectedReturnValue(String expectedReturnValue) {
+        this.expectedReturnValue = expectedReturnValue;
+    }
 
     public Long getId() {
         return id;

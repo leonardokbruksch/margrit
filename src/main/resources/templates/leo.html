@@ -14,18 +14,67 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
+
 <body class="text-center container">
 
 
-    <div id="classesContainer">
+<div id="classesContainer" style="">
+    <form id="classesTestDataForm">
 
-        <div class="className"><h1 class="h3 mb-3 font-weight-normal">ServletForgotPassword</h1></div>
-        <div class="methodName"><h1 class="h3 mb-3 font-weight-normal">sendEmail</h1></div>
-        <div class="paramater"><h1 class="h3 mb-3 font-weight-normal">String : username</h1></div>
+        <div id="classesCards">
+            <div class="classContainer card">
 
-    </div>
+                <div class="className card-header">
+                    <h1 class="h3 mb-3 font-weight-normal">ServletForgotPassword</h1>
+                </div>
 
-    <script src="/js/home.js"></script>
+                <div class="card-body method">
+                    <h5 class="methodName card-title text-left">checkUser</h5>
+
+                    <input hidden="true" class="methodId" name="id" value="2"/>
+
+                    <div class="parameter form-inline">
+                        <div class="form-group mb-2">
+                            <input type="text" readonly="true" class="form-control-plaintext" id="parameter" value="String : username"/>
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" name="parameterValue" class="form-control parameterValue" id="parameter#4" placeholder="Value"/>
+                        </div>
+                            <input hidden="true" class="parameterId" name="id" value="4"/>
+                    </div>
+
+                    <div class="parameter form-inline">
+                        <div class="form-group mb-2">
+                            <input type="text" readonly="true" class="form-control-plaintext" id="parameter" value="int : userId"/>
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" name="parameterValue" class="form-control parameterValue" id="parameter#5" placeholder="Value"/>
+                        </div>
+                            <input hidden="true" class="parameterId" name="id" value="5"/>
+                    </div>
+
+                    <div class="returnType form-inline">
+                        <div class="form-group mb-2">
+                            <input type="text" readonly="true" class="form-control-plaintext" id="returnType" value="Boolean"/>
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" name="expectedReturnValue" class="form-control expectedReturnValue" placeholder="Value"/>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="sumbitClassesTestData"/>
+
+    </form>
+</div>
+
+
 </body>
 
 </html>

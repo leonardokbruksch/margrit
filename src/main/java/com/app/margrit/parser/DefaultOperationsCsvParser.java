@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -84,8 +85,7 @@ public class DefaultOperationsCsvParser implements OperationsCsvParser {
         methodName = methodName.replace("public", "").trim();
         Method currentMethod = new Method(methodName);
 
-        String returnType = operation.replaceAll("(.*)\\:", "").trim();
-        currentMethod.setReturnType(returnType);
+        currentMethod.setReturnType(getMethodReturnType(operation));
 
         currentMethod.setParameters(createParameters(record));
 
@@ -94,8 +94,17 @@ public class DefaultOperationsCsvParser implements OperationsCsvParser {
         return currentMethod;
     }
 
+    private String getMethodReturnType(String operation){
+        String returnType = operation.replaceAll("(.*)\\:", "").trim();
+        if(!returnType.equalsIgnoreCase("void")){
+            return returnType;
+        } else {
+            return null;
+        }
+    }
+
     private List<Parameter> createParameters(CSVRecord record) {
-        List<String> parameters = getParameters(record);
+        List<String> parameters = Arrays.asList(getParameters(record));
 
         List<Parameter> parametersObjects = new ArrayList<>();
 
@@ -114,13 +123,11 @@ public class DefaultOperationsCsvParser implements OperationsCsvParser {
         return parametersObjects;
     }
 
-    private List<String> getParameters(CSVRecord record) {
+    private String[] getParameters(CSVRecord record) {
         String operation = record.get("Operation");
 
-        String onlyOneParameter = operation.substring(operation.indexOf("(") + 1, operation.indexOf(")"));
-
-        List<String> parameters = new ArrayList<>();
-        parameters.add(onlyOneParameter);
+        String allParametersAsString = operation.substring(operation.indexOf("(") + 1, operation.indexOf(")"));
+        String[] parameters = allParametersAsString.split(",");
 
         return parameters;
     }

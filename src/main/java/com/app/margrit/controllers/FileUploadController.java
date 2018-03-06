@@ -45,15 +45,9 @@ public class FileUploadController {
 
         List<Class> classes = csvParser.readCsvOperationsFile(file);
 
-        //session.setAttribute("classes", classes);
-
-        model.addAttribute("classes", classes);
-
         ObjectMapper objectMapper = new ObjectMapper();
 
         String classesAsJson = objectMapper.writeValueAsString(classes);
-
-        //return "inputParametersTable";
 
         return new ResponseEntity(classesAsJson, HttpStatus.OK);
 
@@ -62,7 +56,6 @@ public class FileUploadController {
     private void saveFileOnFolder(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         try {
 
-            // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
             Files.write(path, bytes);
@@ -73,12 +66,6 @@ public class FileUploadController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @GetMapping("/operations")
-    public String parsedOperations(Model model, HttpSession session){
-        model.addAttribute("classes", session.getAttribute("classes"));
-        return "inputParametersTable";
     }
 
 }

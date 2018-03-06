@@ -16,6 +16,16 @@ public class Parameter {
 
     private String parameterName;
 
+    private String parameterValue;
+
+    public String getParameterValue() {
+        return parameterValue;
+    }
+
+    public void setParameterValue(String parameterValue) {
+        this.parameterValue = parameterValue;
+    }
+
     public Parameter(String parameterName, String parameterType){
         this.parameterType = parameterType;
         this.parameterName = parameterName;
