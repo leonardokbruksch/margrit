@@ -1,6 +1,7 @@
 package com.app.margrit.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 

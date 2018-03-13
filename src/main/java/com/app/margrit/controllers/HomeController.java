@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    @RequestMapping("/home")
+    @RequestMapping("/")
     public String home(){
         return "home";
     }
@@ -23,4 +23,7 @@ public class HomeController {
     public String testedoleo(){
         return "leo";
     }
+
+    @RequestMapping("/options")
+    public String testedosubmit() { return "optionsTest"; }
 }

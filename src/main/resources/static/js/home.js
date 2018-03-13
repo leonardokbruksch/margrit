@@ -15,7 +15,15 @@ $(document).ready(function () {
 
     $("#classesTestDataForm").submit(function( event ) {
         event.preventDefault();
-        fireAjaxSubmitClassesData();
+        submitTestData();
+    });
+
+    $("#randomizeCheckbox").change(function() {
+        if(this.checked) {
+            disableParameterInputs();
+        } else {
+            enableParameterInputs();
+        }
     });
 
 });
@@ -25,9 +33,8 @@ function hideClassesContent(){
 }
 
 function fireAjaxFileUpload() {
-    // Get form
-    var form = $('#fileUploadForm')[0];
 
+    var form = $('#fileUploadForm')[0];
     var data = new FormData(form);
 
     $.ajax({
@@ -141,8 +148,17 @@ function createParametersData(parameters, html) {
     return html;
 }
 
-function fireAjaxSubmitClassesData() {
+function submitTestData() {
 
+    if( $('#randomizeCheckbox').is( ":checked" ) ){
+        fireAjaxSubmitClassesTestData("random/randomizeTestData");
+    } else {
+        fireAjaxSubmitClassesTestData("submitClassesTestData");
+    }
+
+}
+
+function fireAjaxSubmitClassesTestData(url) {
     listOfClasses = getClassesDataToSubmit();
 
     $.ajax( {
@@ -151,13 +167,29 @@ function fireAjaxSubmitClassesData() {
             'Content-Type': 'application/json'
         },
         type: 'POST',
-        url: 'submitClassesTestData',
+        url: url,
         data: JSON.stringify(listOfClasses),
         success: function(data) {
             debugger;
         }
     });
+}
 
+function fireAjaxRandomizeTestData() {
+    listOfClasses = getClassesDataToSubmit();
+
+    $.ajax( {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        type: 'POST',
+        url: 'randomizeTestData',
+        data: JSON.stringify(listOfClasses),
+        success: function(data) {
+            debugger;
+        }
+    });
 }
 
 function getClassesDataToSubmit() {
@@ -213,4 +245,12 @@ function getParametersDataForMethod(currentMethod) {
     });
 
     return listOfParameters;
+}
+
+function disableParameterInputs(){
+    $('.parameterValue').prop('disabled', true);
+}
+
+function enableParameterInputs(){
+    $('.parameterValue').prop('disabled', false);
 }
