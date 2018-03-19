@@ -26,4 +26,8 @@ public class HomeController {
 
     @RequestMapping("/options")
     public String testedosubmit() { return "optionsTest"; }
+
+    @RequestMapping("/selectClasses")
+    public String selectClasses() { return "selectClasses"; }
+
 }

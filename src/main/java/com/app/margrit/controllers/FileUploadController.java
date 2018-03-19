@@ -46,7 +46,6 @@ public class FileUploadController {
         List<Class> classes = csvParser.readCsvOperationsFile(file);
 
         ObjectMapper objectMapper = new ObjectMapper();
-
         String classesAsJson = objectMapper.writeValueAsString(classes);
 
         return new ResponseEntity(classesAsJson, HttpStatus.OK);

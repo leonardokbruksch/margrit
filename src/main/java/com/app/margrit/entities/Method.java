@@ -2,11 +2,12 @@ package com.app.margrit.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
 @Entity
-public class Method {
+public class Method implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -74,7 +75,7 @@ public class Method {
                 ", methodName='" + methodName + '\'' +
                 ", parameters=" + parameters +
                 ", returnType='" + returnType + '\'' +
+                ", expectedReturnValue='" + expectedReturnValue + '\'' +
                 '}';
     }
-
 }

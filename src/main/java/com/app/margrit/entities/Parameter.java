@@ -5,9 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
-public class Parameter {
+public class Parameter implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -64,6 +65,7 @@ public class Parameter {
                 "id=" + id +
                 ", parameterType='" + parameterType + '\'' +
                 ", parameterName='" + parameterName + '\'' +
+                ", parameterValue='" + parameterValue + '\'' +
                 '}';
     }
 }

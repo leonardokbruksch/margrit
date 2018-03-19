@@ -6,7 +6,7 @@ $('.custom-file-input').on('change',function(){
 
 $(document).ready(function () {
 
-    hideClassesContent();
+    hideNonUploadContainers();
 
     $("#submitUpload").click(function (event) {
         event.preventDefault();
@@ -26,10 +26,22 @@ $(document).ready(function () {
         }
     });
 
+     $("#submitGenerateTestCases").click(function (event) {
+         event.preventDefault();
+         generateTestCases($("#generateTestCases"));
+     });
+
+    $("#submitClassSelection").click(function (event) {
+        event.preventDefault();
+        setSelectedClasses();
+    });
+
 });
 
-function hideClassesContent(){
+function hideNonUploadContainers(){
+    $('#classesSelectionContainer').hide();
     $('#classesContainer').hide();
+    $('#generationOptionsContainer').hide();
 }
 
 function fireAjaxFileUpload() {
@@ -42,34 +54,71 @@ function fireAjaxFileUpload() {
         enctype: 'multipart/form-data',
         url: "upload",
         data: data,
-        processData: false, //prevent jQuery from automatically transforming the data into a query string
+        processData: false,
         contentType: false,
         cache: false,
         timeout: 600000,
         datatype: "json",
         success: function (data) {
 
-            createClassesData(data);
-
             $('#fileUploadForm').hide();
 
-            $('#classesContainer').show();
-
-            console.log("SUCCESS : ", data);
-
-        },
-        error: function (e) {
-
-            $("#result").text(e.responseText);
-            console.log("ERROR : ", e);
+            createBootstrapTable();
 
         }
     });
 
 }
 
-function createClassesData(data){
-    $.each(JSON.parse(data), function(idx, obj) {
+function createBootstrapTable(){
+
+    $('#selectClassesTable').bootstrapTable({
+        url: 'classesTable',
+        columns: [{
+            field: 'state',
+            title: 'Checkbox',
+            checkbox: 'true'
+
+        }, {
+            field: 'className',
+            title: 'Class Name'
+        }, ]
+    });
+
+    $('#classesSelectionContainer').show();
+
+}
+function setSelectedClasses() {
+
+    activeClasses = getSelectedClasses();
+
+    $.ajax( {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        type: 'POST',
+        url: '/setSelectedClasses',
+        data: JSON.stringify(activeClasses),
+        datatype: "json",
+        success: function(data) {
+
+            $('#classesSelectionContainer').hide();
+
+            createClassesData(data);
+            $('#classesContainer').show();
+        }
+    });
+
+}
+
+function getSelectedClasses(){
+    selectedClasses = $('#selectClassesTable').bootstrapTable('getSelections');
+    return selectedClasses;
+}
+
+function createClassesData(classes){
+    $.each(classes, function(idx, obj) {
 
         var html = '';
         html += '<div class="classContainer card">';
@@ -170,24 +219,8 @@ function fireAjaxSubmitClassesTestData(url) {
         url: url,
         data: JSON.stringify(listOfClasses),
         success: function(data) {
-            debugger;
-        }
-    });
-}
-
-function fireAjaxRandomizeTestData() {
-    listOfClasses = getClassesDataToSubmit();
-
-    $.ajax( {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        type: 'POST',
-        url: 'randomizeTestData',
-        data: JSON.stringify(listOfClasses),
-        success: function(data) {
-            debugger;
+            $('#classesContainer').hide();
+            $('#generationOptionsContainer').show();
         }
     });
 }
@@ -253,4 +286,14 @@ function disableParameterInputs(){
 
 function enableParameterInputs(){
     $('.parameterValue').prop('disabled', false);
+}
+
+function generateTestCases(form) {
+
+    if ( $('#generateAbstractStructure').is( ":checked" ) ){
+        form.attr('action', "/generateAbstractStructure").submit();
+    } else {
+        form.attr('action', "/generateTestCases").submit();
+    }
+
 }

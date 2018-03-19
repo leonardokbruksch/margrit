@@ -13,25 +13,31 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+
 </head>
 <body class="text-center container">
 
-    <div id="generationOptionsContainer">
-
-        <h1 class="h3 mb-3 font-weight-normal">Please choose mode of test cases generation:</h1>
-
-        <form id="generateTestCases">
-
-            <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-primary active"><input type="radio" name="options" id="generateAbstractStructure" autocomplete="off" checked="true"/> Abstract Structure</label>
-                <label class="btn btn-primary"><input type="radio" name="options" id="generateJunit" autocomplete="off"/> Junit Test Cases</label>
-            </div>
-
-            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="submitGenerateTestCases" />
-
-        </form>
-
-    </div>
+<table data-toggle="table" data-click-to-select="true" data-url="classesTable">
+    <thead>
+    <tr>
+        <th data-field="state" data-checkbox="true"></th>
+        <th data-sortable="true" data-field="className">Class Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td></td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>2</td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 

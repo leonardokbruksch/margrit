@@ -18,6 +18,16 @@ public class ClassDto {
     @OneToMany
     private List<MethodDto> methods;
 
+    private boolean isValid;
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
     public String getClassName() {
         return className;
     }
