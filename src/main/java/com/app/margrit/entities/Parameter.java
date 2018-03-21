@@ -69,4 +69,12 @@ public class Parameter implements Serializable {
                 '}';
     }
 
+    public String getParameterValueForGeneration(){
+        if (parameterType.equalsIgnoreCase("String")){
+            return '"' + parameterValue + '"';
+        } else {
+            return parameterValue;
+        }
+    }
+
 }

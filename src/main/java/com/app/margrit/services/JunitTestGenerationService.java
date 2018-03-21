@@ -17,6 +17,12 @@ public class JunitTestGenerationService {
 
     private static String TESTCASES_FOLDER = "C://margrit//testCases//";
 
+    final String STRING_TYPE = "String";
+    final String CHAR_TYPE = "char";
+    final String BOOLEAN_TYPE = "boolean";
+    final String INT_TYPE = "int";
+    final String DOUBLE_TYPE = "double";
+
     JCodeModel codeModel = new JCodeModel();
 
     private String currentTestObjectName;
@@ -95,10 +101,36 @@ public class JunitTestGenerationService {
     }
 
     private JInvocation buildAssertStatement(Method method, JDefinedClass definedClass) {
-
-        JInvocation assertEquals = codeModel.ref(Assert.class).staticInvoke("assertEquals").arg(method.getExpectedReturnValue()).arg(JExpr.ref("returnValue"));
+        
+        JExpression expression = getExpessionForMethodReturn(method);
+        JInvocation assertEquals = codeModel.ref(Assert.class).staticInvoke("assertEquals").arg(expression).arg(JExpr.ref("returnValue"));
 
         return assertEquals;
+    }
+
+    private JExpression getExpessionForMethodReturn(Method method){
+
+        JExpression expression = JExpr._this();
+
+        String returnType = method.getReturnType();
+
+        if (returnType.equalsIgnoreCase(STRING_TYPE)){
+            expression = JExpr.lit(method.getExpectedReturnValue());
+        }
+        else if (returnType.equalsIgnoreCase(CHAR_TYPE)) {
+            expression = JExpr.lit(method.getExpectedReturnValue().charAt(0));
+        }
+        else if (returnType.equalsIgnoreCase(BOOLEAN_TYPE)) {
+            expression = JExpr.lit(Boolean.parseBoolean(method.getExpectedReturnValue()));
+        }
+        else if (returnType.equalsIgnoreCase(INT_TYPE)) {
+            expression = JExpr.lit(Integer.parseInt(method.getExpectedReturnValue()));
+        }
+        else if (returnType.equalsIgnoreCase(DOUBLE_TYPE)) {
+            expression = JExpr.lit(Double.parseDouble(method.getExpectedReturnValue()));
+        }
+
+        return expression;
     }
 
 }

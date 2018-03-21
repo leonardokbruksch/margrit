@@ -82,9 +82,7 @@ public class Method implements Serializable {
 
     public String getParametersAsString(){
 
-        //@TODO -> Se o parameter for String tem que colocar em ASPAS ""
-
-        List<String> listOfParameterValues = parameters.stream().map(Parameter::getParameterValue).collect(Collectors.toList());
+        List<String> listOfParameterValues = parameters.stream().map(Parameter::getParameterValueForGeneration).collect(Collectors.toList());
 
         return String.join(" , ", listOfParameterValues);
     }
