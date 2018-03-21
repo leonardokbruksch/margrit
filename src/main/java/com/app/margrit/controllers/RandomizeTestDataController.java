@@ -34,8 +34,6 @@ public class RandomizeTestDataController extends SubmitTestDataController{
             updateMethods(classDto);
         }
 
-        List<Class> all = classRepository.findAll();
-
         return new ResponseEntity(HttpStatus.OK);
     }
 
