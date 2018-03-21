@@ -3,6 +3,7 @@ package com.app.margrit.services;
 import com.app.margrit.entities.Class;
 import com.app.margrit.entities.Method;
 import com.sun.codemodel.*;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class JunitTestGenerationService {
 
     JCodeModel codeModel = new JCodeModel();
 
+    private String currentTestObjectName;
+
     public void createTestCases(List<Class> classes) throws JClassAlreadyExistsException, IOException {
         for (Class aClass : classes){
             createTestCase(aClass);
@@ -30,11 +33,21 @@ public class JunitTestGenerationService {
 
         setJUnitTestDependencies(aClass, definedClass);
 
+        //Set current Object name as Attribute for further use
+        currentTestObjectName = aClass.getClassName();
+
         for(Method method : aClass.getMethods()){
             createTestMethod(method, definedClass);
         }
 
         codeModel.build(new File(TESTCASES_FOLDER + ""));
+    }
+
+    private JDefinedClass createClass(Class aClass, JCodeModel codeModel) throws JClassAlreadyExistsException {
+        JPackage jPackage = codeModel._package("junit");
+        JDefinedClass definedClass = jPackage._class(aClass.getClassName() + "Test");
+        definedClass.javadoc().add("Generated Junit Test Case for: " + aClass.getClassName() + " class.");
+        return definedClass;
     }
 
     private void setJUnitTestDependencies(Class aClass, JDefinedClass definedClass) {
@@ -55,20 +68,37 @@ public class JunitTestGenerationService {
 
     }
 
-    private JDefinedClass createClass(Class aClass, JCodeModel codeModel) throws JClassAlreadyExistsException {
-        JPackage jPackage = codeModel._package("com.generated.junit");
-        JDefinedClass definedClass = jPackage._class(aClass.getClassName() + "Test");
-        definedClass.javadoc().add("Generated Junit Test Case for: " + aClass.getClassName() + " class.");
-        return definedClass;
-    }
-
     private void createTestMethod(Method method, JDefinedClass definedClass) {
         JMethod testMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "test" + method.getMethodName());
         testMethod.annotate(Test.class);
 
         JBlock body = testMethod.body();
 
-        String methodCall = "className" + "." + method.getMethodName() + "(" + "parameters" + ")";
-        body.directStatement(methodCall);
+        body.directStatement(buildMethodCallStatement(method));
+
+        if (method.getReturnType() != null) {
+            JInvocation assertEqualsInvok = buildAssertStatement(method, definedClass);
+            body.add(assertEqualsInvok);
+        }
     }
+
+    private String buildMethodCallStatement(Method method) {
+        String methodReturn = "";
+
+        if(method.getReturnType() != null){
+            methodReturn = method.getReturnType() + " returnValue = ";
+        }
+
+        String methodCall = methodReturn + currentTestObjectName + "." + method.getMethodName() + "(" + method.getParametersAsString() + ");";
+
+        return methodCall;
+    }
+
+    private JInvocation buildAssertStatement(Method method, JDefinedClass definedClass) {
+
+        JInvocation assertEquals = codeModel.ref(Assert.class).staticInvoke("assertEquals").arg(method.getExpectedReturnValue()).arg(JExpr.ref("returnValue"));
+
+        return assertEquals;
+    }
+
 }

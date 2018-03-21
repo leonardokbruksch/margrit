@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Method implements Serializable {
@@ -77,5 +78,14 @@ public class Method implements Serializable {
                 ", returnType='" + returnType + '\'' +
                 ", expectedReturnValue='" + expectedReturnValue + '\'' +
                 '}';
+    }
+
+    public String getParametersAsString(){
+
+        //@TODO -> Se o parameter for String tem que colocar em ASPAS ""
+
+        List<String> listOfParameterValues = parameters.stream().map(Parameter::getParameterValue).collect(Collectors.toList());
+
+        return String.join(" , ", listOfParameterValues);
     }
 }
