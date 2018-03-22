@@ -29,6 +29,7 @@ public class JunitTestGenerationService {
 
     public void createTestCases(List<Class> classes) throws JClassAlreadyExistsException, IOException {
         for (Class aClass : classes){
+            currentTestObjectName = aClass.getClassName();
             createTestCase(aClass);
         }
     }
@@ -38,9 +39,6 @@ public class JunitTestGenerationService {
         JDefinedClass definedClass = createClass(aClass, codeModel);
 
         setJUnitTestDependencies(aClass, definedClass);
-
-        //Set current Object name as Attribute for further use
-        currentTestObjectName = aClass.getClassName();
 
         for(Method method : aClass.getMethods()){
             createTestMethod(method, definedClass);
@@ -57,21 +55,16 @@ public class JunitTestGenerationService {
     }
 
     private void setJUnitTestDependencies(Class aClass, JDefinedClass definedClass) {
-
-        //CREATE ATTRIBUTE
-        // Attribute must be of the type of class and
+        //@TODO -> fullClassName must have the actual PACKAGE of the tested class.
         String fullClassName = "com.test." + aClass.getClassName();
         JClass objectReference = codeModel.ref(fullClassName);
         JFieldVar objectAttribute = definedClass.field(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, objectReference, aClass.getClassName());
 
-        //CREATE @Before METHOD
         JMethod setupMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "setUp");
         setupMethod.annotate(Before.class);
 
-        //Instantiate Obj
         JBlock body = setupMethod.body();
         body.assign(objectAttribute, JExpr._new(objectReference));
-
     }
 
     private void createTestMethod(Method method, JDefinedClass definedClass) {
@@ -101,7 +94,7 @@ public class JunitTestGenerationService {
     }
 
     private JInvocation buildAssertStatement(Method method, JDefinedClass definedClass) {
-        
+
         JExpression expression = getExpessionForMethodReturn(method);
         JInvocation assertEquals = codeModel.ref(Assert.class).staticInvoke("assertEquals").arg(expression).arg(JExpr.ref("returnValue"));
 

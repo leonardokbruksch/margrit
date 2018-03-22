@@ -8,8 +8,12 @@ public class JunitExample {
 
     @Test
     public void testingBooleans(){
-        boolean test = true;
+        String test = "11.6";
 
-        Assert.assertEquals(true, test);
+        double doubletest = Double.parseDouble(test);
+
+        double dm = 12.6D;
+
+        Assert.assertEquals(11.6, doubletest, 0);
     }
 }
