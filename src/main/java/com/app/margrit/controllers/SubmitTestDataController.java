@@ -2,7 +2,6 @@ package com.app.margrit.controllers;
 
 
 import com.app.margrit.dto.ClassDto;
-import com.app.margrit.dto.DTO;
 import com.app.margrit.dto.MethodDto;
 import com.app.margrit.dto.ParameterDto;
 import com.app.margrit.entities.Class;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,17 +37,33 @@ public class SubmitTestDataController {
 
     @PostMapping("/submitClassesTestData")
     public ResponseEntity<?> submitClassesTestData(@RequestBody List<ClassDto> classesDto){
+
+        updateClasses(classesDto);
+
         for (ClassDto classDto : classesDto){
-            updateMethods(classDto);
+            updateMethods(classDto.getMethods());
         }
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    protected void updateMethods(ClassDto classDto) {
+    protected void updateClasses(List<ClassDto> classesDto) {
+        List<Class> classes = new ArrayList<>();
+
+        for (ClassDto classDto : classesDto){
+            Class aClass = classRepository.findOne(classDto.getClassName());
+            modelMapper.map(classDto, aClass);
+
+            classes.add(aClass);
+        }
+
+        classRepository.save(classes);
+    }
+
+    protected void updateMethods(List<MethodDto> methodsDto) {
         List<Method> methods = new ArrayList<>();
 
-        for (MethodDto methodDto : classDto.getMethods()){
+        for (MethodDto methodDto : methodsDto){
 
             updateParameters(methodDto);
 

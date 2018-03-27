@@ -30,15 +30,16 @@
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
 
-            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="submitUpload" />
+            <input class="btn btn-lg btn-primary btn-block submit" type="submit" value="Submit" id="submitUpload" disabled="disabled"/>
 
             <span id="result"></span>
 
         </form>
 
         <div id="classesSelectionContainer">
+            <h1 class="h3 mb-3 font-weight-normal">Which classes would you like to test?</h1>
             <table id="selectClassesTable" data-click-to-select="true"></table>
-            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="submitClassSelection" />
+            <input class="btn btn-lg btn-primary btn-block submit" type="submit" value="Submit" id="submitClassSelection" />
         </div>
 
         <div id="classesContainer">
@@ -50,7 +51,11 @@
                 <input class="form-check-input" type="checkbox" value="" id="randomizeCheckbox"/>
                 <label class="form-check-label" for="randomizeCheckbox">Randomize Parameter's values</label>
 
-                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="sumbitClassesTestData" />
+                <div class="row"></div>
+                <input class="form-check-input" type="checkbox" value="" id="setClassPackage"/>
+                <label class="form-check-label" for="randomizeCheckbox">Set Classes Package</label>
+
+                <input class="btn btn-lg btn-primary btn-block submit" type="submit" value="Submit" id="sumbitClassesTestData" />
 
             </form>
         </div>
@@ -66,7 +71,7 @@
                 <label class="btn btn-primary"><input type="radio" name="options" id="generateJunit" autocomplete="off"/> Junit Test Cases</label>
             </div>
 
-            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" id="submitGenerateTestCases" />
+            <input class="btn btn-lg btn-primary btn-block submit" type="submit" value="Generate" id="submitGenerateTestCases" />
 
             </form>
 

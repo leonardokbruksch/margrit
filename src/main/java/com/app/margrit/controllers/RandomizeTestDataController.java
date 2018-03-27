@@ -30,8 +30,11 @@ public class RandomizeTestDataController extends SubmitTestDataController{
 
     @PostMapping("/randomizeTestData")
     public ResponseEntity<?> randodmizeTestData(@RequestBody List<ClassDto> classesDto){
+
+        updateClasses(classesDto);
+
         for (ClassDto classDto : classesDto){
-            updateMethods(classDto);
+            updateMethods(classDto.getMethods());
         }
 
         return new ResponseEntity(HttpStatus.OK);

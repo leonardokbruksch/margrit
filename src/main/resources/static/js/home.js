@@ -20,9 +20,17 @@ $(document).ready(function () {
 
     $("#randomizeCheckbox").change(function() {
         if(this.checked) {
-            disableParameterInputs();
+            disableTestDataInputs();
         } else {
-            enableParameterInputs();
+            enableTestDataInputs();
+        }
+    });
+
+    $("#setClassPackage").change(function() {
+        if(this.checked) {
+            showPackageInputs();
+        } else {
+            hidePackageInputs();
         }
     });
 
@@ -36,12 +44,32 @@ $(document).ready(function () {
         setSelectedClasses();
     });
 
+    $('#customFile').change(function () {
+        handleUploadSubmitButton();
+    });
+
 });
 
 function hideNonUploadContainers(){
     $('#classesSelectionContainer').hide();
     $('#classesContainer').hide();
     $('#generationOptionsContainer').hide();
+}
+
+function handleUploadSubmitButton(){
+    if ( $('#customFile').val() != ''){
+        $('#submitUpload').attr('disabled' , false);
+    } else {
+        $('#submitUpload').attr('disabled' , true);
+    }
+}
+
+function showPackageInputs() {
+    $('.packageName').attr('hidden', false);
+}
+
+function hidePackageInputs() {
+    $('.packageName').attr('hidden', true);
 }
 
 function fireAjaxFileUpload() {
@@ -88,6 +116,7 @@ function createBootstrapTable(){
     $('#classesSelectionContainer').show();
 
 }
+
 function setSelectedClasses() {
 
     activeClasses = getSelectedClasses();
@@ -124,6 +153,9 @@ function createClassesData(classes){
         html += '<div class="classContainer card">';
         html += '<div class="className card-header"> <h1 class="h3 mb-3 font-weight-normal">' + obj.className + '</h1> </div>';
 
+        html = createPackageInput(html);
+        html = createIsValidInput(html, obj);
+
         html = createMethodsData(obj.methods, html);
 
         html += '</div>';
@@ -131,6 +163,30 @@ function createClassesData(classes){
         $('#classesCards').append(html);
 
     });
+}
+
+function createPackageInput(html){
+
+    html += '<div class="packageName form-inline" hidden="true">';
+
+    html += '<div class="form-group mb-2">';
+    html += '<input type="text" readonly="true" class="form-control-plaintext" value="Package Name"/>';
+    html += '</div>';
+
+    html += '<div class="form-group mx-sm-3 mb-2">';
+    html += '<input type="text" hidden="true" name="packageName" class="form-control packageName packageValue" placeholder="Package"/>';
+    html += '</div>';
+
+    html += '</div>';
+
+    return html;
+}
+
+function createIsValidInput(html, aClass){
+
+    html += '<input hidden="true" class="isValid" name="id" value="' + aClass.valid + '"/>';
+
+    return html;
 }
 
 function createMethodsData(methods, html) {
@@ -164,7 +220,7 @@ function createReturnTypeInput(method, html) {
         html += '</div>';
 
         html += '<div class="form-group mx-sm-3 mb-2">';
-        html += '<input type="text" name="expectedReturnValue" class="form-control expectedReturnValue" placeholder="Return value"/>';
+        html += '<input type="text" name="expectedReturnValue" class="form-control expectedReturnValue" placeholder="Expected Return value"/>';
         html += '</div>';
 
         html += '</div>';
@@ -237,6 +293,12 @@ function getClassesDataToSubmit() {
         var className = currentClass.find($(".className")).text().trim();
         aClass.className = className;
 
+        if ( $('#setClassPackage').is( ":checked" ) ) {
+            aClass.packageName = currentClass.find($(".packageValue")).val();
+        }
+
+        aClass.valid = currentClass.find($(".isValid")).val();
+
         aClass.methods = getMethodsDataForClass(currentClass);
 
         listOfClasses.push(aClass);
@@ -255,7 +317,11 @@ function getMethodsDataForClass(currentClass) {
         var method = new Object();
         method.id = currentMethod.find($('.methodId')).val();
         method.methodName = currentMethod.find($('.methodName')).text().trim();
-        method.expectedReturnValue = currentMethod.find($('.expectedReturnValue')).val();
+
+        var expectedReturnValue = currentMethod.find($('.expectedReturnValue')).val();
+        if(expectedReturnValue !== null && expectedReturnValue !== ''){
+            method.expectedReturnValue = expectedReturnValue;
+        }
 
         method.parameters = getParametersDataForMethod(currentMethod);
 
@@ -280,12 +346,16 @@ function getParametersDataForMethod(currentMethod) {
     return listOfParameters;
 }
 
-function disableParameterInputs(){
+function disableTestDataInputs(){
+    $('.parameterValue').val('');
+    $('.expectedReturnValue').val('');
     $('.parameterValue').prop('disabled', true);
+    $('.expectedReturnValue').prop('disabled', true);
 }
 
-function enableParameterInputs(){
+function enableTestDataInputs(){
     $('.parameterValue').prop('disabled', false);
+    $('.expectedReturnValue').prop('disabled', false);
 }
 
 function generateTestCases(form) {

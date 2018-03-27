@@ -55,8 +55,8 @@ public class JunitTestGenerationService {
     }
 
     private void setJUnitTestDependencies(Class aClass, JDefinedClass definedClass) {
-        //@TODO -> fullClassName must have the actual PACKAGE of the tested class.
-        String fullClassName = "com.test." + aClass.getClassName();
+
+        String fullClassName = getFullClassName(aClass);
         JClass objectReference = codeModel.ref(fullClassName);
         JFieldVar objectAttribute = definedClass.field(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, objectReference, aClass.getClassName());
 
@@ -67,6 +67,14 @@ public class JunitTestGenerationService {
         body.assign(objectAttribute, JExpr._new(objectReference));
     }
 
+    private String getFullClassName(Class aClass){
+        if ( aClass.getPackageName() == null || aClass.getPackageName().isEmpty()){
+            return aClass.getClassName();
+        } else {
+            return aClass.getPackageName() + "." + aClass.getClassName();
+        }
+    }
+
     private void createTestMethod(Method method, JDefinedClass definedClass) {
         JMethod testMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "test" + method.getMethodName());
         testMethod.annotate(Test.class);
@@ -75,7 +83,7 @@ public class JunitTestGenerationService {
 
         body.directStatement(buildMethodCallStatement(method));
 
-        if (method.getReturnType() != null) {
+        if (method.getReturnType() != null && method.getExpectedReturnValue() != null) {
             JInvocation assertEqualsInvok = buildAssertStatement(method, definedClass);
             body.add(assertEqualsInvok);
         }
@@ -95,13 +103,13 @@ public class JunitTestGenerationService {
 
     private JInvocation buildAssertStatement(Method method, JDefinedClass definedClass) {
 
-        JExpression expression = getExpessionForMethodReturn(method);
+        JExpression expression = getExpressionForMethodReturn(method);
         JInvocation assertEquals = codeModel.ref(Assert.class).staticInvoke("assertEquals").arg(expression).arg(JExpr.ref("returnValue"));
 
         return assertEquals;
     }
 
-    private JExpression getExpessionForMethodReturn(Method method){
+    private JExpression getExpressionForMethodReturn(Method method){
 
         JExpression expression = JExpr._this();
 

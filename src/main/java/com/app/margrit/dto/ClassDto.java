@@ -20,6 +20,8 @@ public class ClassDto {
 
     private boolean isValid;
 
+    private String packageName;
+
     public boolean isValid() {
         return isValid;
     }
@@ -42,5 +44,13 @@ public class ClassDto {
 
     public void setMethods(List<MethodDto> methods) {
         this.methods = methods;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 }

@@ -20,6 +20,8 @@ public class Class implements Serializable{
 
     private boolean isValid;
 
+    private String packageName;
+
     protected Class(){}
 
     public Class(String className){
@@ -58,11 +60,21 @@ public class Class implements Serializable{
         methods.add(method);
     }
 
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
     @Override
     public String toString() {
         return "Class{" +
                 "className='" + className + '\'' +
                 ", methods=" + methods +
+                ", isValid=" + isValid +
+                ", packageName='" + packageName + '\'' +
                 '}';
     }
 }
