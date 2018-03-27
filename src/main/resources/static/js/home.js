@@ -48,6 +48,11 @@ $(document).ready(function () {
         handleUploadSubmitButton();
     });
 
+    $("#saveRandomOptions").click(function (event) {
+        event.preventDefault();
+        saveRandomOptions();
+    });
+
 });
 
 function hideNonUploadContainers(){
@@ -366,4 +371,45 @@ function generateTestCases(form) {
         form.attr('action', "/generateTestCases").submit();
     }
 
+}
+
+function saveRandomOptions() {
+
+    randomOptions = getRandomOptions();
+
+    $.ajax( {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        type: 'POST',
+        url: '/setRandomOptions',
+        data: JSON.stringify(randomOptions),
+        success: function(data) {
+            $('#randomizeModal').modal('hide');
+        }
+    });
+
+}
+
+function getRandomOptions() {
+    modal = $('#randomizeModal');
+
+    var randomOptions = new Object();
+
+    randomOptions.optionName = '';
+
+    randomOptions.numberMinLength = modal.find($('#numberMinLength')).val();
+    randomOptions.numberMaxLength = modal.find($('#numberMaxLength')).val();
+
+    randomOptions.stringMinLength = modal.find($('#stringMinLength')).val();
+    randomOptions.stringMaxLength = modal.find($('#stringMaxLength')).val();
+
+    if ( $('#testValueLimits').is( ":checked" ) ) {
+        randomOptions.testValueLimits = true;
+    } else {
+        randomOptions.testValueLimits = false;
+    }
+
+    return randomOptions;
 }

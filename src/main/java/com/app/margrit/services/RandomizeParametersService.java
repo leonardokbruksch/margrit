@@ -2,7 +2,9 @@ package com.app.margrit.services;
 
 import com.app.margrit.dto.ParameterDto;
 import com.app.margrit.entities.Parameter;
+import com.app.margrit.entities.RandomOptions;
 import com.app.margrit.repositories.ParameterRepository;
+import com.app.margrit.repositories.RandomOptionsRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,11 @@ public class RandomizeParametersService {
 
     @Autowired
     private ParameterRepository parameterRepository;
+
+    @Autowired
+    private RandomOptionsRepository randomOptionsRepository;
+
+    private RandomOptions randomOptions;
 
     private Random random;
 
@@ -33,6 +40,8 @@ public class RandomizeParametersService {
     }
 
     public void randomizeParameters(List<ParameterDto> parametersDto){
+        setRandomOptionsObject();
+
         List<Parameter> parameters = new ArrayList<>();
 
         for (ParameterDto parameterDto : parametersDto){
@@ -41,6 +50,14 @@ public class RandomizeParametersService {
         }
 
         parameterRepository.save(parameters);
+    }
+
+    private void setRandomOptionsObject() {
+        randomOptions = randomOptionsRepository.findOne("customOption");
+
+        if (randomOptions == null){
+            randomOptions = randomOptionsRepository.findOne("defaultOption");
+        }
     }
 
     private Parameter randomizeParameter(Parameter parameter) {
@@ -67,8 +84,8 @@ public class RandomizeParametersService {
     }
 
     public String getRandomDouble(){
-        double rangeMax = 999;
-        double rangeMin = 0;
+        double rangeMin = randomOptions.getNumberMinLength();
+        double rangeMax = randomOptions.getNumberMaxLength();
 
         double randomDouble = rangeMin + (rangeMax - rangeMin) * random.nextDouble();
 
@@ -76,8 +93,8 @@ public class RandomizeParametersService {
     }
 
     public String getRandomInteger() {
-        int rangeMax = 999;
-        int rangeMin = 0;
+        int rangeMin = randomOptions.getNumberMinLength();
+        int rangeMax = randomOptions.getNumberMaxLength();
 
         int randomInteger = random.nextInt((rangeMax - rangeMin) + 1) + rangeMin;
 
@@ -97,8 +114,8 @@ public class RandomizeParametersService {
     }
 
     public String getRandomString() {
-        int minLength = 3;
-        int maxLength = 17;
+        int minLength = randomOptions.getStringMinLength();
+        int maxLength = randomOptions.getStringMaxLength();
 
         String randomString = RandomStringUtils.randomAscii(minLength, maxLength);
         

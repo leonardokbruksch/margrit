@@ -2,10 +2,12 @@ package com.app.margrit.services;
 
 import com.app.margrit.entities.Class;
 import com.app.margrit.entities.Method;
+import com.app.margrit.repositories.RandomOptionsRepository;
 import com.sun.codemodel.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -22,6 +24,9 @@ public class JunitTestGenerationService {
     final String BOOLEAN_TYPE = "boolean";
     final String INT_TYPE = "int";
     final String DOUBLE_TYPE = "double";
+
+    @Autowired
+    private RandomOptionsRepository randomOptionsRepository;
 
     JCodeModel codeModel = new JCodeModel();
 
