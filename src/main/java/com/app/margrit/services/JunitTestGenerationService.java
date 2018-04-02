@@ -2,6 +2,7 @@ package com.app.margrit.services;
 
 import com.app.margrit.entities.Class;
 import com.app.margrit.entities.Method;
+import com.app.margrit.entities.RandomOptions;
 import com.app.margrit.repositories.RandomOptionsRepository;
 import com.sun.codemodel.*;
 import org.junit.Assert;
@@ -28,11 +29,19 @@ public class JunitTestGenerationService {
     @Autowired
     private RandomOptionsRepository randomOptionsRepository;
 
+    @Autowired
+    private BoundaryValueParameterService boundaryValueParameterService;
+
     JCodeModel codeModel = new JCodeModel();
 
     private String currentTestObjectName;
 
+    private RandomOptions randomOptions;
+
     public void createTestCases(List<Class> classes) throws JClassAlreadyExistsException, IOException {
+
+        randomOptions = randomOptionsRepository.findOne("customOption");
+
         for (Class aClass : classes){
             currentTestObjectName = aClass.getClassName();
             createTestCase(aClass);
@@ -86,7 +95,7 @@ public class JunitTestGenerationService {
 
         JBlock body = testMethod.body();
 
-        body.directStatement(buildMethodCallStatement(method));
+        buildMethodCall(method, body);
 
         if (method.getReturnType() != null && method.getExpectedReturnValue() != null) {
             JInvocation assertEqualsInvok = buildAssertStatement(method, definedClass);
@@ -94,7 +103,44 @@ public class JunitTestGenerationService {
         }
     }
 
-    private String buildMethodCallStatement(Method method) {
+    private void buildMethodCall(Method method, JBlock body) {
+
+        if ( randomOptions != null && randomOptions.isTestValueLimits() == true){
+            buildMethodMultipleCallStatement(method, body);
+        } else {
+            body.directStatement(buildMethodSingleCallStatement(method));
+        }
+
+    }
+
+    private void buildMethodMultipleCallStatement(Method method, JBlock body) {
+
+        //METHOD CALL WITH VALUE BELLOW RANGE
+        String bellowLimitParameters = boundaryValueParameterService.getBellowLimitParameters(randomOptions, method);
+        body.directStatement(buildMethodCallStatementWithCustomParam(method, bellowLimitParameters));
+
+        // METHOD CALL WITH RANDOM VALUE
+        body.directStatement(buildMethodSingleCallStatement(method));
+
+        // METHOD CALL WITH VALUE ABOVE RANGE
+        String aboveLimitParameters = boundaryValueParameterService.getAboveLimitParameters(randomOptions, method);
+        body.directStatement(buildMethodCallStatementWithCustomParam(method, aboveLimitParameters));
+
+    }
+
+    private String buildMethodCallStatementWithCustomParam(Method method, String parameters){
+        String methodReturn = "";
+
+        if(method.getReturnType() != null){
+            methodReturn = method.getReturnType() + " returnValue = ";
+        }
+
+        String methodCall = methodReturn + currentTestObjectName + "." + method.getMethodName() + "(" + parameters + ");";
+
+        return methodCall;
+    }
+
+    private String buildMethodSingleCallStatement(Method method) {
         String methodReturn = "";
 
         if(method.getReturnType() != null){

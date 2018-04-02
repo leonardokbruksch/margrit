@@ -77,4 +77,18 @@ public class Parameter implements Serializable {
         }
     }
 
+    public boolean isString(){
+        if (parameterType.equalsIgnoreCase("String")){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isNumber(){
+        if (parameterType.equalsIgnoreCase("int") || parameterType.equalsIgnoreCase("double")){
+            return true;
+        }
+        return false;
+    }
+
 }
