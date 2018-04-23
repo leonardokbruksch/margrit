@@ -4,6 +4,7 @@ import com.app.margrit.entities.Class;
 import com.app.margrit.repositories.ClassRepository;
 import com.app.margrit.services.JunitTestGenerationService;
 import com.app.margrit.services.RandomizeParametersService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.zeroturnaround.zip.ZipUtil;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,21 +40,25 @@ public class GenerateTestCasesController {
     private static String TESTCASES_ZIP = "C://margrit//testCases//junit.zip";
 
     @RequestMapping("/generateAbstractStructure")
-    public void generateAbstractStructure(HttpServletResponse response) throws IOException {
-        List<Class> allClasses = classRepository.findByIsValidTrue();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String classesAsJson = objectMapper.writeValueAsString(allClasses);
+    public void generateAbstractStructure(HttpServletResponse response, @SessionAttribute String classesAsJson) throws IOException {
 
         String fileName = "abstractStructure.txt";
         response.setContentType("application/x-download");
         response.setHeader("Content-disposition", "attachment; filename=" + fileName);
         response.getOutputStream().write(classesAsJson.getBytes());
+
     }
 
     @RequestMapping(value="/generateTestCases", produces="application/zip")
-    public void generateTestCases(HttpServletResponse response) throws IOException, JClassAlreadyExistsException {
-        List<Class> classes = classRepository.findByIsValidTrue();
+    public void generateTestCases(HttpServletResponse response, @SessionAttribute String classesAsJson) throws IOException, JClassAlreadyExistsException {
+        //@TODO Change to get Classes related to Abstract Strucure
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        List<Class> classes = objectMapper.readValue(classesAsJson, new TypeReference<List<Class>>() {
+        });
+
+        //List<Class> classes = classRepository.findByIsValidTrue();
 
         testGenerationService.createTestCases(classes);
 

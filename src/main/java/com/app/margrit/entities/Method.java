@@ -1,5 +1,7 @@
 package com.app.margrit.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -80,6 +82,7 @@ public class Method implements Serializable {
                 '}';
     }
 
+    @JsonIgnore
     public String getParametersAsString(){
 
         List<String> listOfParameterValues = parameters.stream().map(Parameter::getParameterValueForGeneration).collect(Collectors.toList());

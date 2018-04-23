@@ -357,7 +357,6 @@ function disableTestDataInputs(){
     $('.parameterValue').prop('disabled', true);
     $('.expectedReturnValue').prop('disabled', true);
 
-    //$('#randomizingOptions').hide();
     $('#randomizingOptions').attr('hidden', false);
 }
 
@@ -365,7 +364,6 @@ function enableTestDataInputs(){
     $('.parameterValue').prop('disabled', false);
     $('.expectedReturnValue').prop('disabled', false);
 
-    //$('#randomizingOptions').show();
     $('#randomizingOptions').attr('hidden', true);
 }
 

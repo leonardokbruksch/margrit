@@ -10,6 +10,8 @@ import com.app.margrit.entities.Parameter;
 import com.app.margrit.repositories.ClassRepository;
 import com.app.margrit.repositories.MethodRepository;
 import com.app.margrit.repositories.ParameterRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,21 +39,24 @@ public class SubmitTestDataController {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping("/submitClassesTestData")
-    public ResponseEntity<?> submitClassesTestData(@RequestBody List<ClassDto> classesDto){
+    public ResponseEntity<?> submitClassesTestData(@RequestBody List<ClassDto> classesDto, HttpServletRequest request) throws JsonProcessingException {
 
-        updateClasses(classesDto);
+        List<Class> classes = updateClasses(classesDto);
 
-        for (ClassDto classDto : classesDto){
-            updateMethods(classDto.getMethods());
-        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        String classesAsJson = objectMapper.writeValueAsString(classes);
+        request.getSession().setAttribute("classesAsJson", classesAsJson);
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    protected void updateClasses(List<ClassDto> classesDto) {
+    protected List<Class> updateClasses(List<ClassDto> classesDto) {
         List<Class> classes = new ArrayList<>();
 
         for (ClassDto classDto : classesDto){
+
+            updateMethods(classDto.getMethods());
+
             Class aClass = classRepository.findOne(classDto.getClassName());
             modelMapper.map(classDto, aClass);
 
@@ -58,6 +64,8 @@ public class SubmitTestDataController {
         }
 
         classRepository.save(classes);
+
+        return classes;
     }
 
     protected void updateMethods(List<MethodDto> methodsDto) {

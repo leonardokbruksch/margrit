@@ -1,5 +1,7 @@
 package com.app.margrit.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -69,6 +71,7 @@ public class Parameter implements Serializable {
                 '}';
     }
 
+    @JsonIgnore
     public String getParameterValueForGeneration(){
         if (parameterType.equalsIgnoreCase("String")){
             return '"' + parameterValue + '"';
@@ -77,6 +80,7 @@ public class Parameter implements Serializable {
         }
     }
 
+    @JsonIgnore
     public boolean isString(){
         if (parameterType.equalsIgnoreCase("String")){
             return true;
@@ -84,6 +88,7 @@ public class Parameter implements Serializable {
         return false;
     }
 
+    @JsonIgnore
     public boolean isNumber(){
         if (parameterType.equalsIgnoreCase("int") || parameterType.equalsIgnoreCase("double")){
             return true;
