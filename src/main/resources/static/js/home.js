@@ -120,6 +120,7 @@ function createBootstrapTable(){
 
     $('#classesSelectionContainer').show();
 
+
 }
 
 function setSelectedClasses() {
@@ -155,7 +156,7 @@ function createClassesData(classes){
     $.each(classes, function(idx, obj) {
 
         var html = '';
-        html += '<div class="classContainer card">';
+        html += '<div class="classContainer card border-warning">';
         html += '<div class="className card-header"> <h1 class="h3 mb-3 font-weight-normal">' + obj.className + '</h1> </div>';
 
         html = createPackageInput(html);
@@ -172,8 +173,9 @@ function createClassesData(classes){
 
 function createPackageInput(html){
 
-    html += '<div class="packageName form-inline" hidden="true">';
+    html += '<div class="packageName card-body" hidden="true" style="margin-bottom: -2.30rem">';
 
+    html += '<div class="form-inline">';
     html += '<div class="form-group mb-2">';
     html += '<input type="text" readonly="true" class="form-control-plaintext" value="Package Name"/>';
     html += '</div>';
@@ -182,6 +184,7 @@ function createPackageInput(html){
     html += '<input type="text" hidden="true" name="packageName" class="form-control packageName packageValue" placeholder="Package"/>';
     html += '</div>';
 
+    html += '</div>';
     html += '</div>';
 
     return html;
@@ -198,14 +201,20 @@ function createMethodsData(methods, html) {
     $.each(methods, function(idx, method) {
 
 
-        html += '<div class="card-body method">';
-        html += '<h5 class="methodName card-title text-left">' + method.methodName + '</h5>';
+        html += '<div class="method">';
+        // New Card for each method
+        html += '<div class="card">';
+        html += '<h5 class="methodName card-title text-left card-header">' + method.methodName + '</h5>';
         html += '<input hidden="true" class="methodId" name="id" value="' + method.id + '"/>';
 
+        html += '<div class="card-body">';
+        html += '<h6 class="text-left">Parameters</h6>';
         html = createParametersData(method.parameters, html);
+        html += '</div>';
 
         html = createReturnTypeInput(method, html);
 
+        html += '</div>';
         html += '</div>';
 
     });
@@ -217,8 +226,11 @@ function createMethodsData(methods, html) {
 function createReturnTypeInput(method, html) {
 
     if(method.returnType != null) {
-        // CREATE BOX FOR EXPECTED RETURN TYPE
-        html += '<div class="returnType form-inline">';
+
+        html += '<div class="returnType card-footer">';
+        html += '<h6 class="text-left">Expected Return Value</h6>';
+
+        html += '<div class="form-inline">';
 
         html += '<div class="form-group mb-2">';
         html += '<input type="text" readonly="true" class="form-control-plaintext" value="' + method.returnType + '"/>';
@@ -226,6 +238,8 @@ function createReturnTypeInput(method, html) {
 
         html += '<div class="form-group mx-sm-3 mb-2">';
         html += '<input type="text" name="expectedReturnValue" class="form-control expectedReturnValue" placeholder="Expected Return value"/>';
+        html += '</div>';
+
         html += '</div>';
 
         html += '</div>';
@@ -356,15 +370,11 @@ function disableTestDataInputs(){
     $('.expectedReturnValue').val('');
     $('.parameterValue').prop('disabled', true);
     $('.expectedReturnValue').prop('disabled', true);
-
-    $('#randomizingOptions').attr('hidden', false);
 }
 
 function enableTestDataInputs(){
     $('.parameterValue').prop('disabled', false);
     $('.expectedReturnValue').prop('disabled', false);
-
-    $('#randomizingOptions').attr('hidden', true);
 }
 
 function generateTestCases(form) {

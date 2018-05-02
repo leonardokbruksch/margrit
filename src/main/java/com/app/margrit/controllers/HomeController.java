@@ -33,10 +33,12 @@ public class HomeController {
         return "leo";
     }
 
+    @RequestMapping("/mason")
+    public String testedomason(){
+        return "mason";
+    }
+
     @RequestMapping("/options")
     public String testedosubmit() { return "optionsTest"; }
-
-    @RequestMapping("/selectClasses")
-    public String selectClasses() { return "selectClasses"; }
 
 }

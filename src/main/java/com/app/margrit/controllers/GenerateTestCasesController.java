@@ -28,9 +28,6 @@ import java.util.zip.ZipOutputStream;
 public class GenerateTestCasesController {
 
     @Autowired
-    protected ClassRepository classRepository;
-
-    @Autowired
     private JunitTestGenerationService testGenerationService;
 
     private static String UPLOADED_FOLDER = "C://margrit//abstractStructures//";
@@ -51,14 +48,9 @@ public class GenerateTestCasesController {
 
     @RequestMapping(value="/generateTestCases", produces="application/zip")
     public void generateTestCases(HttpServletResponse response, @SessionAttribute String classesAsJson) throws IOException, JClassAlreadyExistsException {
-        //@TODO Change to get Classes related to Abstract Strucure
 
         ObjectMapper objectMapper = new ObjectMapper();
-
-        List<Class> classes = objectMapper.readValue(classesAsJson, new TypeReference<List<Class>>() {
-        });
-
-        //List<Class> classes = classRepository.findByIsValidTrue();
+        List<Class> classes = objectMapper.readValue(classesAsJson, new TypeReference<List<Class>>(){});
 
         testGenerationService.createTestCases(classes);
 
