@@ -110,11 +110,6 @@
 			<type>jar</type>
 		</dependency>
 
-			<dependency>
-				<groupId>com.shekhargulati</groupId>
-				<artifactId>strman</artifactId>
-				<version>0.4.0</version>
-			</dependency>
 
     </dependencies>
 
