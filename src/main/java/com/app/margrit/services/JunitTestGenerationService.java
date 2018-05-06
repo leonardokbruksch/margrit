@@ -36,6 +36,8 @@ public class JunitTestGenerationService {
 
     private String currentTestObjectName;
 
+    private boolean isObjectParam;
+
     private RandomOptions randomOptions;
 
     public void createTestCases(List<Class> classes) throws JClassAlreadyExistsException, IOException {
@@ -99,6 +101,11 @@ public class JunitTestGenerationService {
 
         if (method.getReturnType() != null && method.getExpectedReturnValue() != null) {
             JInvocation assertEqualsInvok = buildAssertStatement(method, definedClass);
+
+            if (isObjectParam = true){
+                body.directStatement("// for the assert bellow you must manually add Object");
+            }
+
             body.add(assertEqualsInvok);
         }
     }
@@ -162,6 +169,8 @@ public class JunitTestGenerationService {
 
     private JExpression getExpressionForMethodReturn(Method method){
 
+        isObjectParam = false;
+
         JExpression expression = JExpr._this();
 
         String returnType = method.getReturnType();
@@ -180,6 +189,8 @@ public class JunitTestGenerationService {
         }
         else if (returnType.equalsIgnoreCase(DOUBLE_TYPE)) {
             expression = JExpr.lit(Double.parseDouble(method.getExpectedReturnValue()));
+        } else {
+            isObjectParam = true;
         }
 
         return expression;

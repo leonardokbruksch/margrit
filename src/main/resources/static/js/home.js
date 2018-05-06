@@ -352,7 +352,8 @@ function getMethodsDataForClass(currentClass) {
 function getParametersDataForMethod(currentMethod) {
     var listOfParameters = new Array();
 
-    currentMethod.children('.parameter').each( function(){
+    currentMethod.find('.parameter').each( function(){
+
         var currentParameter = $(this);
 
         var parameter = new Object();
