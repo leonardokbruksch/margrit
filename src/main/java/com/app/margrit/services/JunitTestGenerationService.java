@@ -45,8 +45,12 @@ public class JunitTestGenerationService {
         randomOptions = randomOptionsRepository.findOne("customOption");
 
         for (Class aClass : classes){
-            currentTestObjectName = aClass.getClassName();
+
+            String className = aClass.getClassName();
+            currentTestObjectName = className.substring(0,1).toLowerCase() + className.substring(1);
+
             createTestCase(aClass);
+
         }
     }
 
@@ -74,7 +78,7 @@ public class JunitTestGenerationService {
 
         String fullClassName = getFullClassName(aClass);
         JClass objectReference = codeModel.ref(fullClassName);
-        JFieldVar objectAttribute = definedClass.field(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, objectReference, aClass.getClassName());
+        JFieldVar objectAttribute = definedClass.field(JMod.PRIVATE , objectReference, currentTestObjectName);
 
         JMethod setupMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "setUp");
         setupMethod.annotate(Before.class);
@@ -100,9 +104,12 @@ public class JunitTestGenerationService {
         buildMethodCall(method, body);
 
         if (method.getReturnType() != null && method.getExpectedReturnValue() != null) {
+
+            isObjectParam = false;
+
             JInvocation assertEqualsInvok = buildAssertStatement(method, definedClass);
 
-            if (isObjectParam = true){
+            if (isObjectParam == true){
                 body.directStatement("// for the assert bellow you must manually add Object");
             }
 
@@ -168,8 +175,6 @@ public class JunitTestGenerationService {
     }
 
     private JExpression getExpressionForMethodReturn(Method method){
-
-        isObjectParam = false;
 
         JExpression expression = JExpr._this();
 
