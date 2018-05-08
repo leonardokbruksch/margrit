@@ -46,3 +46,34 @@ html,
     padding: 15px;
     margin: 0 auto;
 }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    height: 60px !important;
+    width: 60px !important;
+    outline: black !important;
+    background-size: 100%, 100% !important;
+    border-radius: 50% !important;
+    border: 1px solid black !important;
+    background-image: none !important;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+width: 30% !important;
+}
+
+.carousel-control-next-icon:after
+{
+    content: '>';
+    font-size: 45px;
+    color: black;
+    line-height: 3rem;
+}
+
+.carousel-control-prev-icon:after {
+    content: '<';
+    font-size: 45px;
+    color: black;
+    line-height: 3rem;
+}

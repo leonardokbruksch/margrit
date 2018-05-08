@@ -48,11 +48,21 @@
         <div id="classesContainer">
             <form id="classesTestDataForm">
 
-                <div id="classesCards" class="card-columns">
+                <div id="classesCards" class="carousel slide" data-ride="carousel" data-interval="false">
                 </div>
 
 
                 <div class="testDataOptions">
+
+                    <a class="carousel-control-prev" href="#classesCards" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#classesCards" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+
                     <input class="form-check-input" type="checkbox" value="" id="setClassPackage"/>
                     <label class="form-check-label" for="setClassPackage">Set Classes Package</label>
 

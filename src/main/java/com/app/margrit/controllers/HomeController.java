@@ -33,9 +33,9 @@ public class HomeController {
         return "leo";
     }
 
-    @RequestMapping("/mason")
-    public String testedomason(){
-        return "mason";
+    @RequestMapping("/carousel")
+    public String testedocarousel(){
+        return "carousel";
     }
 
     @RequestMapping("/options")

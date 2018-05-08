@@ -141,6 +141,7 @@ function setSelectedClasses() {
             $('#classesSelectionContainer').hide();
 
             createClassesData(data);
+            $('#classesCards').find('.carousel-item').first().addClass('active');
             $('#classesContainer').show();
         }
     });
@@ -156,7 +157,7 @@ function createClassesData(classes){
     $.each(classes, function(idx, obj) {
 
         var html = '';
-        html += '<div class="classContainer card border-warning">';
+        html += '<div class="classContainer card border-warning carousel-item">';
         html += '<div class="className card-header"> <h1 class="h3 mb-3 font-weight-normal">' + obj.className + '</h1> </div>';
 
         html = createPackageInput(html);
@@ -173,7 +174,7 @@ function createClassesData(classes){
 
 function createPackageInput(html){
 
-    html += '<div class="packageName card-body" hidden="true" style="margin-bottom: -2.30rem">';
+    html += '<div class="packageName card-body" hidden="true" style="margin-bottom: -1rem">';
 
     html += '<div class="form-inline">';
     html += '<div class="form-group mb-2">';
