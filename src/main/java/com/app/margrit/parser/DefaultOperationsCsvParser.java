@@ -117,8 +117,8 @@ public class DefaultOperationsCsvParser implements OperationsCsvParser {
             parametersObjects.add(parameterObject);
 
         }
-
-        parameterRepository.save(parametersObjects);
+        parameterRepository.saveAll(parametersObjects);
+        //parameterRepository.save(parametersObjects);
 
         return parametersObjects;
     }

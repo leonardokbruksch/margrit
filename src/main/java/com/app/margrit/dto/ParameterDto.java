@@ -1,7 +1,5 @@
 package com.app.margrit.dto;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;

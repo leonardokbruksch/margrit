@@ -7,7 +7,7 @@ import com.app.margrit.services.RandomizeParametersService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+//import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,11 @@ public class GenerateTestCasesController {
     @Autowired
     private JunitTestGenerationService testGenerationService;
 
-    private static String UPLOADED_FOLDER = "C://margrit//abstractStructures//";
+    private static String UPLOADED_FOLDER = "output/";
 
-    private static String TESTCASES_FOLDER = "C://margrit//testCases//";
-    private static String TESTCASES_JUNIT_FOLDER = "C://margrit//testCases//junit";
-    private static String TESTCASES_ZIP = "C://margrit//testCases//junit.zip";
+    private static String TESTCASES_FOLDER = "output/";
+    private static String TESTCASES_JUNIT_FOLDER = "output/junit/";
+    private static String TESTCASES_ZIP = "output/junit.zip";
 
     @RequestMapping("/generateAbstractStructure")
     public void generateAbstractStructure(HttpServletResponse response, @SessionAttribute String classesAsJson) throws IOException {
@@ -55,9 +55,16 @@ public class GenerateTestCasesController {
         testGenerationService.createTestCases(classes);
 
         generateZipFile(response);
+
+        //return "thankyou";
     }
 
     private void generateZipFile(HttpServletResponse response) throws IOException {
+
+        File junitDir = new File(TESTCASES_JUNIT_FOLDER);
+        if (!junitDir.exists()) {
+            junitDir.mkdirs();
+        }
 
         File zipFile = new File(TESTCASES_ZIP);
         ZipUtil.pack(new File(TESTCASES_JUNIT_FOLDER), zipFile);

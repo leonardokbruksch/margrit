@@ -45,10 +45,13 @@ public class ClassesSelectionController {
     }
 
     private List<Class> updateToActiveState(List<ClassDto> classesDto) {
+
         List<Class> classes = new ArrayList<>();
 
         for (ClassDto classDto : classesDto) {
-            Class aClass = classRepository.findOne(classDto.getClassName());
+
+            Class aClass = classRepository.findById(classDto.getClassName()).get();
+
             modelMapper.map(classDto, aClass);
 
             aClass.setValid(Boolean.TRUE);
@@ -56,7 +59,7 @@ public class ClassesSelectionController {
             classes.add(aClass);
         }
 
-        classRepository.save(classes);
+        classRepository.saveAll(classes);
 
         return classes;
     }

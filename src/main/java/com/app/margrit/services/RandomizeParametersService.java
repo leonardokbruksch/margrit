@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -45,18 +46,20 @@ public class RandomizeParametersService {
         List<Parameter> parameters = new ArrayList<>();
 
         for (ParameterDto parameterDto : parametersDto){
-            Parameter parameter = randomizeParameter(parameterRepository.findOne(parameterDto.getId()));
+            Parameter parameter = randomizeParameter(parameterRepository.findById(parameterDto.getId()).get());
             parameters.add(parameter);
         }
 
-        parameterRepository.save(parameters);
+        parameterRepository.saveAll(parameters);
     }
 
     private void setRandomOptionsObject() {
-        randomOptions = randomOptionsRepository.findOne("customOption");
+        Optional<RandomOptions> random = randomOptionsRepository.findById("customOption");
 
-        if (randomOptions == null){
-            randomOptions = randomOptionsRepository.findOne("defaultOption");
+        if (!random.isPresent()){
+            randomOptions = randomOptionsRepository.findById("defaultOption").get();
+        } else {
+            randomOptions = random.get();
         }
     }
 

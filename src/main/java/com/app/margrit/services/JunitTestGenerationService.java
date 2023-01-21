@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JunitTestGenerationService {
 
-    private static String TESTCASES_FOLDER = "C://margrit//testCases//";
+    private static String TESTCASES_FOLDER = "output/";
 
     final String STRING_TYPE = "String";
     final String CHAR_TYPE = "char";
@@ -42,7 +43,7 @@ public class JunitTestGenerationService {
 
     public void createTestCases(List<Class> classes) throws JClassAlreadyExistsException, IOException {
 
-        randomOptions = randomOptionsRepository.findOne("customOption");
+        setRandomOptionsCustomRange();
 
         for (Class aClass : classes){
 
@@ -51,6 +52,14 @@ public class JunitTestGenerationService {
 
             createTestCase(aClass);
 
+        }
+    }
+
+    private void setRandomOptionsCustomRange() {
+        Optional<RandomOptions> random = randomOptionsRepository.findById("customOption");
+
+        if (random.isPresent()){
+            randomOptions = random.get();
         }
     }
 

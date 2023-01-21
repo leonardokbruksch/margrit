@@ -57,13 +57,13 @@ public class SubmitTestDataController {
 
             updateMethods(classDto.getMethods());
 
-            Class aClass = classRepository.findOne(classDto.getClassName());
+            Class aClass = classRepository.findById(classDto.getClassName()).get();
             modelMapper.map(classDto, aClass);
 
             classes.add(aClass);
         }
 
-        classRepository.save(classes);
+        classRepository.saveAll(classes);
 
         return classes;
     }
@@ -75,23 +75,23 @@ public class SubmitTestDataController {
 
             updateParameters(methodDto);
 
-            Method method = methodRepository.findOne(methodDto.getId());
+            Method method = methodRepository.findById(methodDto.getId()).get();
             modelMapper.map(methodDto, method);
             methods.add(method);
         }
 
-        methodRepository.save(methods);
+        methodRepository.saveAll(methods);
     }
 
     protected void updateParameters(MethodDto methodDto) {
         List<Parameter> parameters = new ArrayList<>();
 
         for (ParameterDto parameterDto : methodDto.getParameters()){
-            Parameter parameter = parameterRepository.findOne(parameterDto.getId());
+            Parameter parameter = parameterRepository.findById(parameterDto.getId()).get();
             modelMapper.map(parameterDto, parameter);
             parameters.add(parameter);
         }
 
-        parameterRepository.save(parameters);
+        parameterRepository.saveAll(parameters);
     }
 }
